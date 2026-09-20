@@ -1,0 +1,12 @@
+id = "prezto-herdr"
+name = "Herdr for Prezto"
+version = "0.1.0"
+min_herdr_version = "0.9.1"
+description = "Prezto completions and pane helpers, with read-only setup diagnostics."
+platforms = ["linux", "macos"]
+
+[[actions]]
+id = "setup-check"
+title = "Prezto: check prerequisites and show setup"
+contexts = ["workspace"]
+command = ["sh", "native/setup-check.sh"]
