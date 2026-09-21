@@ -8,8 +8,9 @@
   Herdr calls, or session lifecycle operations.
 - Native plugin registration is user-wide. See `docs/publication.md` for the
   isolation requirement and outstanding native validation gate.
-- Preserve upstream notices in `licenses/` and `NOTICE.md`. `LICENSE.proposed`
-  is an owner-review draft, not an effective grant. `hreload` is intentionally omitted.
+- The public package is `alexg0/herdr-prezto`; its Prezto module remains `herdr`.
+- Preserve `LICENSE` (MIT), upstream notices in `licenses/`, and `NOTICE.md`.
+  `hreload` is intentionally omitted.
 
 ## Maintaining this file
 

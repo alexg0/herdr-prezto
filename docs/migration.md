@@ -8,7 +8,7 @@ This package has two independent entrypoints:
   diagnostics. Native registration does not install shell configuration.
 
 A dotfiles manager should reference one stable checkout, such as
-`~/.local/share/prezto-herdr`. It should not copy the module into dotfiles or
+`~/.local/share/herdr-prezto`. It should not copy the module into dotfiles or
 make a native plugin installation a prerequisite for completion. Consume an
 approved commit/release only after standalone readiness is confirmed.
 
@@ -16,7 +16,7 @@ Merge this pattern into your existing `.zpreztorc` (keep your other directories
 and your full module list):
 
 ```zsh
-local herdr_root="$HOME/.local/share/prezto-herdr"
+local herdr_root="$HOME/.local/share/herdr-prezto"
 local -a extra_module_dirs selected_modules
 zstyle -a ':prezto:load' pmodule-dirs extra_module_dirs
 selected_modules=(environment terminal editor completion)

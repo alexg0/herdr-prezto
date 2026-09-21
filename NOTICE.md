@@ -4,8 +4,9 @@
 `zprezto-contrib/herdr/init.zsh` at commit
 `9fad49587bdb716eba40bd53ccc2ae05e8b811db`. The combined implementation entered
 that history at `9978a6a`, authored by Alexander Goldstein. That source tree had
-no license file and the module had no license header. Extraction does not
-establish permission to publish newly authored portions.
+no license file and the module had no license header. The owner subsequently
+approved publication of this standalone package under the MIT License on
+2026-09-21; the effective grant is in [LICENSE](LICENSE).
 
 The pane hooks, notification logic, helpers, and background completion-cache
 pattern are adapted from Robby Russell's
@@ -14,7 +15,7 @@ The upstream implementation and MIT license at that pinned revision were reviewe
 against the extracted code. Its complete copyright and permission notice is
 preserved verbatim in [licenses/herdr-ohmyzsh-MIT.txt](licenses/herdr-ohmyzsh-MIT.txt):
 Copyright (c) 2026 Robby Russell. That upstream grant remains applicable to its
-covered portions regardless of the proposed owner license.
+covered portions alongside the project license.
 
 The requirement guard and module-loading conventions follow
 [Prezto](https://github.com/sorin-ionescu/prezto/tree/cff2d01871425b1b80710f8ec6a475c5a53145b4).
@@ -37,10 +38,9 @@ Neither it nor the `hreload` wrapper is shipped here. This prevents advertising
 an Oh My Zsh operation as working Prezto support. No real reload-all invocation
 was used for extraction or verification.
 
-## Proposed owner license
+## Project license
 
-[LICENSE.proposed](LICENSE.proposed) contains an MIT proposal for owner review.
-It is deliberately not named `LICENSE`, and is not yet an effective grant for
-new code. Before publication, the owner must confirm authorship/rights and the
-copyright line, approve a license, and retain the upstream notices above.
-No license approval or publication authority is inferred from this draft.
+[LICENSE](LICENSE) contains the owner-approved MIT license for this package,
+with copyright 2026 Alexander Goldstein. Preserve it together with both upstream
+notices when redistributing the relevant code. The source-history attribution
+above was verified before adopting the license.

@@ -1,4 +1,4 @@
-# Herdr for Prezto
+# herdr-prezto — Herdr for Prezto
 
 Herdr CLI completion for [Prezto](https://github.com/sorin-ionescu/prezto),
 plus slow-command reporting, notifications, and pane helpers inside
@@ -6,11 +6,11 @@ plus slow-command reporting, notifications, and pane helpers inside
 **setup/check action** that diagnoses prerequisites and prints manual installation
 instructions. Installing that action does not load the module into Zsh.
 
-This is a prepublication package. The proposed repository is
-`alexg0/prezto-herdr`; it has not been published or submitted to the marketplace.
-The owner must review [license provenance](NOTICE.md) and the
-[proposed license](LICENSE.proposed) before publication. Portable verification
-passes; native linking/action execution still requires an isolated validation.
+[`alexg0/herdr-prezto`](https://github.com/alexg0/herdr-prezto) is MIT licensed.
+The Prezto module passes portable and real-Prezto startup tests. The optional
+native Herdr setup/check action is included, but installation and invocation
+through Herdr remain **unverified**; see the [validation boundary](docs/publication.md).
+Install the Prezto module directly using the instructions below.
 
 ## Requirements
 
@@ -30,10 +30,10 @@ requires 0.9.1; the action itself checks executable presence, not versions.
 ## Install the Prezto module
 
 Use a checkout of this repository, for example at
-`~/.local/share/prezto-herdr`. After publication, the proposed clone command is:
+`~/.local/share/herdr-prezto`:
 
 ```sh
-git clone https://github.com/alexg0/prezto-herdr.git ~/.local/share/prezto-herdr
+git clone https://github.com/alexg0/herdr-prezto.git ~/.local/share/herdr-prezto
 ```
 
 In `${ZDOTDIR:-$HOME}/.zpreztorc`, add the **repository root** to
@@ -41,7 +41,7 @@ In `${ZDOTDIR:-$HOME}/.zpreztorc`, add the **repository root** to
 
 ```zsh
 zstyle ':prezto:load' pmodule-dirs \
-  "$HOME/.local/share/prezto-herdr"
+  "$HOME/.local/share/herdr-prezto"
 ```
 
 Add `herdr` immediately after `completion` in your existing `pmodule` list.
@@ -151,7 +151,7 @@ preserved source reference. Open a new shell to apply this module's changes.
 ## Native Herdr setup/check action
 
 The root [`herdr-plugin.toml`](herdr-plugin.toml) declares one useful action:
-`prezto-herdr.setup-check`. It checks Zsh, the Herdr executable, a Prezto checkout,
+`herdr-prezto.setup-check`. It checks Zsh, the Herdr executable, a Prezto checkout,
 and the packaged module, then prints a shell-quoted install path and module-order
 instructions. It exits 1 if prerequisites are missing, 0 if found. It cannot
 inspect the active completion state of a different shell. `PREZTO_DIR` selects
@@ -163,18 +163,18 @@ Run the exact action script directly without registering a plugin:
 sh native/setup-check.sh
 ```
 
-Once native validation and publication have been approved, Herdr's normal plugin
-interface can install and invoke it:
+The native companion is experimental pending isolated validation. Its intended
+Herdr commands are:
 
 ```sh
-herdr plugin install alexg0/prezto-herdr
-herdr plugin action invoke prezto-herdr.setup-check
-herdr plugin log list --plugin prezto-herdr
+herdr plugin install alexg0/herdr-prezto
+herdr plugin action invoke herdr-prezto.setup-check
+herdr plugin log list --plugin herdr-prezto
 ```
 
-These are future user installation instructions, not steps run by verification.
-Herdr plugin registration is user-wide. The package has no build command,
-startup hook, event hook, keybinding, or automatic shell installer. The action
+These native commands have not been verified against Herdr and are not run by
+the portable checks. Herdr plugin registration is user-wide. The package has no
+build command, startup hook, event hook, keybinding, or automatic shell installer. The action
 does not invoke Herdr or edit configuration. Its output belongs in Herdr's
 plugin command logs. Review the [native validation limitation and release
 checklist](docs/publication.md) before advertising native compatibility.
@@ -222,8 +222,8 @@ the checkout. If used, remove only this module's `_herdr` cache file and refresh
 Prezto's completion dump as needed; do not delete shared cache directories.
 
 If you registered the native companion, unlink a local link with
-`herdr plugin unlink prezto-herdr`, or uninstall a managed installation with
-`herdr plugin uninstall prezto-herdr`. First remove any shell configuration that
+`herdr plugin unlink herdr-prezto`, or uninstall a managed installation with
+`herdr plugin uninstall herdr-prezto`. First remove any shell configuration that
 points at that managed checkout. Native removal does not edit shell startup
 files or affect existing shell functions. Herdr retains plugin config/state.
 
@@ -235,5 +235,6 @@ to retain separate exit hooks and eliminate duplicate generation.
 The module adapts [robbyrussell/herdr-ohmyzsh](https://github.com/robbyrussell/herdr-ohmyzsh)
 by Robby Russell and follows Prezto module conventions. Required upstream MIT
 notices are retained under [`licenses/`](licenses/); see [NOTICE.md](NOTICE.md).
-[`LICENSE.proposed`](LICENSE.proposed) is an owner-review draft, not an effective
-license grant for newly authored or previously unlicensed code.
+The project is distributed under the [MIT License](LICENSE), copyright 2026
+Alexander Goldstein. The retained upstream notices also apply to their respective
+portions.

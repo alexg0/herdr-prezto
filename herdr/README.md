@@ -8,5 +8,5 @@ are available. Only Herdr panes get reporting hooks, notifications, and the
 See the [installation and behavior guide](../README.md) for requirements, cache
 behavior, configuration, diagnostics, verification, and uninstall instructions.
 `hreload` is omitted because the inherited helper sends an Oh My Zsh command.
-Upstream notices and the proposed owner license are explained in
+Upstream notices and the project MIT license are explained in
 [NOTICE.md](../NOTICE.md).

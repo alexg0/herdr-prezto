@@ -24,7 +24,7 @@ class SetupAction(unittest.TestCase):
 
     def test_manifest_has_only_one_read_only_action(self):
         manifest = tomllib.loads((ROOT / 'herdr-plugin.toml').read_text())
-        self.assertEqual(manifest['id'], 'prezto-herdr')
+        self.assertEqual(manifest['id'], 'herdr-prezto')
         self.assertEqual(manifest['platforms'], ['linux', 'macos'])
         self.assertEqual(len(manifest['actions']), 1)
         self.assertEqual(manifest['actions'][0]['command'], ['sh', 'native/setup-check.sh'])
