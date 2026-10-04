@@ -4,7 +4,11 @@ emulate -L zsh
 
 bin="${HERDR_BIN_PATH:-herdr}"
 dry=0
-[[ "$1" == --dry-run ]] && dry=1
+case "$#:$1" in
+  0:) ;;
+  1:--dry-run) dry=1 ;;
+  *) print -u2 "usage: reload-all [--dry-run]"; exit 2 ;;
+esac
 command -v "$bin" >/dev/null 2>&1 || {
   print -u2 "reload-all: herdr binary not found (set HERDR_BIN_PATH or add herdr to PATH)"
   exit 1

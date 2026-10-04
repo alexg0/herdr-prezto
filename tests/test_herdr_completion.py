@@ -178,6 +178,16 @@ esac
         self.assertEqual(self.log.read_text(), 'pane list\npane get w1:p1\n'
                          'pane process-info --pane w1:p1\n')
 
+    def test_reload_all_rejects_unknown_arguments(self):
+        self.stub()
+        for args in (['--dryrun'], ['-n'], ['--help'], ['--dry-run', 'extra'], ['']):
+            result = subprocess.run([ZSH, '-df', str(ROOT / 'herdr/bin/reload-all'), *args],
+                                    env=self.env, capture_output=True, text=True, timeout=20)
+            self.assertEqual(result.returncode, 2, args)
+            self.assertEqual(result.stdout, '', args)
+            self.assertEqual(result.stderr, 'usage: reload-all [--dry-run]\n', args)
+        self.assertFalse(self.log.exists())
+
     def test_failed_cache_refresh_preserves_old_completion(self):
         self.stub("printf '%s\\n' partial; exit 1\n")
         cache = self.home / 'cache'
