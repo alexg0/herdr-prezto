@@ -10,7 +10,6 @@
   isolation requirement and outstanding native validation gate.
 - The public package is `alexg0/herdr-prezto`; its Prezto module remains `herdr`.
 - Preserve `LICENSE` (MIT), upstream notices in `licenses/`, and `NOTICE.md`.
-  `hreload` is intentionally omitted.
 
 ## Maintaining this file
 

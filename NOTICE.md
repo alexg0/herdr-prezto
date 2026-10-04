@@ -28,15 +28,15 @@ Extraction changes add portable tests and documentation, a native read-only
 setup action, correct Prezto cache lookup/registration, preserve pane features
 with existing completers, and make pane initialization repeat-safe.
 
-## Omitted reload helper
+## Reload helper
 
 The source `zprezto-contrib/herdr/bin/reload-all` at dotfiles commit
 `9fad49587bdb716eba40bd53ccc2ae05e8b811db` is preserved in that source history.
 It invokes `omz reload`; its public upstream counterpart is
 [bin/reload-all](https://github.com/robbyrussell/herdr-ohmyzsh/blob/bbc072ada531e6306276900a866a4b44a9b92e74/bin/reload-all).
-Neither it nor the `hreload` wrapper is shipped here. This prevents advertising
-an Oh My Zsh operation as working Prezto support. No real reload-all invocation
-was used for extraction or verification.
+The packaged `herdr/bin/reload-all` and `hreload` wrapper adapt that source for
+Prezto by sending `exec zsh` instead of `omz reload`. Verification uses private
+homes and a stub Herdr executable; no live reload-all invocation is used.
 
 ## Project license
 
