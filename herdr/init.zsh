@@ -7,6 +7,7 @@ if (( ! $+commands[herdr] || ! $+functions[compdef] )); then
 fi
 
 typeset -g _herdr_prezto_bin="${HERDR_BIN_PATH:-herdr}"
+typeset -g _herdr_prezto_root="${0:A:h}"
 
 # Prefer a compinit-managed cache when configured. A missing cache gets an
 # autoloadable fallback immediately; refresh is silent and backgrounded.
@@ -239,4 +240,10 @@ function hworktree {
   args=(--branch "$1" --cwd "$PWD" --focus)
   [[ -n "$2" ]] && args+=(--base "$2")
   "$_herdr_prezto_bin" worktree create "${args[@]}" >/dev/null
+}
+
+function hreload {
+  local reload="$_herdr_prezto_root/bin/reload-all"
+  [[ -x "$reload" ]] || return 1
+  zsh "$reload" "$@"
 }

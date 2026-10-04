@@ -46,7 +46,7 @@ Migration checklist:
    `zshexit` hooks and unrelated shell setup.
 5. Open an isolated new shell: verify CLI present and absent behavior, completion
    registration, exactly one generation, unchanged multiplexer defaults, and no
-   lifecycle calls. Check that `hreload` is no longer offered by the old module.
+   lifecycle calls. Check that `hreload` comes from this module, not the old one.
 6. Remove the old managed module and its installed link only after verification.
    Ensure the dotfiles install manager will not recreate them.
 

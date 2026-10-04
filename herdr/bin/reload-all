@@ -1,0 +1,49 @@
+#!/usr/bin/env zsh
+# Reload idle zsh panes; --dry-run never sends a pane command.
+emulate -L zsh
+
+bin="${HERDR_BIN_PATH:-herdr}"
+dry=0
+case "$#:$1" in
+  0:) ;;
+  1:--dry-run) dry=1 ;;
+  *) print -u2 "usage: reload-all [--dry-run]"; exit 2 ;;
+esac
+command -v "$bin" >/dev/null 2>&1 || {
+  print -u2 "reload-all: herdr binary not found (set HERDR_BIN_PATH or add herdr to PATH)"
+  exit 1
+}
+json="$($bin pane list)" || { print -u2 "reload-all: 'herdr pane list' failed"; exit 1; }
+typeset -a reloaded skipped
+rest="$json"
+while [[ "$rest" =~ '"pane_id":"([^"]+)"' ]]; do
+  id="$match[1]"
+  rest="${rest[MEND+1,-1]}"
+  info="$($bin pane get "$id" 2>/dev/null)" || { skipped+=("$id (unreadable)"); continue; }
+  [[ "$info" == *'"agent":"'* ]] && { skipped+=("$id (agent running)"); continue; }
+  proc="$($bin pane process-info --pane "$id" 2>/dev/null)" || { skipped+=("$id (unreadable)"); continue; }
+  shell_pid=
+  [[ "$proc" =~ '"shell_pid":([0-9]+)' ]] && shell_pid="$match[1]"
+  # An idle pane has exactly one process, its zsh shell.
+  US=$'\x1f'
+  marked="${proc//\"pid\":/$US}"
+  count="${#${marked//[^$US]/}}"
+  if [[ -z "$shell_pid" || "$count" != 1 || "$proc" != *"\"pid\":$shell_pid"* ]]; then
+    skipped+=("$id (busy)")
+    continue
+  fi
+  [[ "$proc" == *'"name":"zsh"'* || "$proc" == *'"argv0":"zsh"'* ]] || { skipped+=("$id (not zsh)"); continue; }
+  if (( dry )); then
+    reloaded+=("$id (dry run)")
+  elif $bin pane run "$id" 'exec zsh' >/dev/null 2>&1; then
+    reloaded+=("$id")
+  else
+    skipped+=("$id (send failed)")
+  fi
+done
+for id in $reloaded; do print "reloaded $id"; done
+for id in $skipped; do print "skipped $id"; done
+body="${#reloaded} shell$([[ ${#reloaded} == 1 ]] || print -n s) reloaded, ${#skipped} skipped"
+(( dry )) && body="dry run: $body"
+print "$body"
+(( dry )) || $bin notification show 'Prezto reloaded' --body "$body" --sound none >/dev/null 2>&1

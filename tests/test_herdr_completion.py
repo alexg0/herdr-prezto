@@ -156,10 +156,37 @@ _herdr_prezto_registered=1
 source "$MODULE" || exit 2
 [[ $_herdr_prezto_registered = 1 && $_herdr_prezto_label = test-command ]] || exit 3
 [[ ${(M)#precmd_functions:#_herdr_prezto_precmd} = 1 ]] || exit 4
-(( ! $+functions[hreload] )) || exit 5
+(( $+functions[hreload] )) || exit 5
 _herdr_prezto_registered=0
 ''')
         self.assertEqual(self.log.read_text(), 'completion zsh\n')
+
+    def test_reload_all_dry_run_sends_nothing(self):
+        self.stub('''case "$*" in
+  'pane list') printf '%s\\n' '{"pane_id":"w1:p1"}' ;;
+  'pane get w1:p1') printf '%s\\n' '{}' ;;
+  'pane process-info --pane w1:p1') printf '%s\\n' '{"shell_pid":123,"name":"zsh","pid":123}' ;;
+  *) exit 99 ;;
+esac
+''')
+        result = subprocess.run([ZSH, '-df', str(ROOT / 'herdr/bin/reload-all'), '--dry-run'],
+                                env=self.env, capture_output=True, text=True, timeout=20)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.stderr, '')
+        self.assertEqual(result.stdout, 'reloaded w1:p1 (dry run)\n'
+                         'dry run: 1 shell reloaded, 0 skipped\n')
+        self.assertEqual(self.log.read_text(), 'pane list\npane get w1:p1\n'
+                         'pane process-info --pane w1:p1\n')
+
+    def test_reload_all_rejects_unknown_arguments(self):
+        self.stub()
+        for args in (['--dryrun'], ['-n'], ['--help'], ['--dry-run', 'extra'], ['']):
+            result = subprocess.run([ZSH, '-df', str(ROOT / 'herdr/bin/reload-all'), *args],
+                                    env=self.env, capture_output=True, text=True, timeout=20)
+            self.assertEqual(result.returncode, 2, args)
+            self.assertEqual(result.stdout, '', args)
+            self.assertEqual(result.stderr, 'usage: reload-all [--dry-run]\n', args)
+        self.assertFalse(self.log.exists())
 
     def test_failed_cache_refresh_preserves_old_completion(self):
         self.stub("printf '%s\\n' partial; exit 1\n")

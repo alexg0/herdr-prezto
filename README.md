@@ -142,11 +142,13 @@ They use the calling pane/current directory and propagate command failures:
 | `htab [LABEL]` | `htab build` | Create and focus a tab in the current directory |
 | `hagent NAME [KIND] [-- ARGS...]` | `hagent reviewer codex -- --help` | Split without focus and start an agent |
 | `hworktree BRANCH [BASE]` | `hworktree feature main` | Create a Herdr worktree and focus it |
+| `hreload [--dry-run]` | `hreload --dry-run` | Reload idle Zsh panes, or preview without sending commands |
 
-`hreload` and `bin/reload-all` are intentionally omitted. The inherited helper
-sends `omz reload`, which is not a Prezto command; changing every idle pane's
-shell also requires separate safety design. See [provenance](NOTICE.md) for the
-preserved source reference. Open a new shell to apply this module's changes.
+`hreload` runs the packaged `herdr/bin/reload-all`. It skips panes with agents,
+busy shells, unreadable process information, or shells other than Zsh. Eligible
+panes receive `exec zsh` to load their shell configuration again; unexported shell
+state is lost. `--dry-run` only reads pane information and prints the result,
+without sending pane commands or notifications. See [provenance](NOTICE.md).
 
 ## Native Herdr setup/check action
 
