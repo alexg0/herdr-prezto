@@ -7,7 +7,7 @@
 - `native/setup-check.sh` must remain read-only: no shell configuration edits,
   Herdr calls, or session lifecycle operations.
 - Native plugin registration is user-wide. See `docs/publication.md` for the
-  isolation requirement and outstanding native validation gate.
+  isolation requirement and remaining live-session validation checks.
 - The public package is `alexg0/herdr-prezto`; its Prezto module remains `herdr`.
 - Preserve `LICENSE` (MIT), upstream notices in `licenses/`, and `NOTICE.md`.
 
