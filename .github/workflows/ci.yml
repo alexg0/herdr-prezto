@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Portable verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Zsh
+        run: sudo apt-get update && sudo apt-get install --yes zsh
+      - name: Check out Prezto
+        uses: actions/checkout@v4
+        with:
+          repository: sorin-ionescu/prezto
+          ref: cff2d01871425b1b80710f8ec6a475c5a53145b4
+          path: .ci/prezto
+          persist-credentials: false
+      - name: Run hermetic checks
+        run: python3 tests/verify.py --prezto-dir .ci/prezto
