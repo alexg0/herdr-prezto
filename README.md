@@ -173,12 +173,8 @@ herdr plugin install alexg0/herdr-prezto
 ```
 
 For noninteractive installation, use `-y`; `--ref main` selects the default
-branch explicitly. On macOS with Herdr 0.9.3, the verified command was
-`herdr plugin install alexg0/herdr-prezto --ref main -y`, with a private
-`XDG_CONFIG_HOME`, a private `XDG_STATE_HOME`, and an explicit unused lab
-`--session`. Herdr installed and registered the manifest without a running
-server. Running `sh native/setup-check.sh` from that installed checkout passed.
-The live plugin registry/lock hashes and session list were unchanged.
+branch explicitly. The verified command and its isolation setup are recorded
+in the [validation details](docs/publication.md#verified-installation-path).
 
 To invoke the action in your own running Herdr session:
 
