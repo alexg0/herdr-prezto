@@ -2,7 +2,7 @@ id = "herdr-prezto"
 name = "Herdr for Prezto"
 version = "0.1.0"
 min_herdr_version = "0.9.1"
-description = "Prezto completions and pane helpers, with read-only setup diagnostics; native installation unverified."
+description = "Prezto completions and pane helpers, with read-only setup diagnostics; live-session action untested."
 platforms = ["linux", "macos"]
 
 [[actions]]

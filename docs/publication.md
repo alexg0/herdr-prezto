@@ -15,8 +15,8 @@ and Linux have not been tested.
 ## Marketplace metadata
 
 The manifest describes Prezto completions and pane helpers with read-only setup
-diagnostics. Its conservative native-validation description predates the
-offline installation check below; live-session action invocation remains untested.
+diagnostics and notes that live-session action invocation remains untested,
+matching the installation check below.
 
 The [official marketplace documentation](https://herdr.dev/docs/marketplace/)
 requires a public, non-fork, non-archived GitHub repository with topic
