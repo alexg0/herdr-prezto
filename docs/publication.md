@@ -7,14 +7,16 @@ Native plugin ID: `herdr-prezto`; version: `0.1.0`.
 Prezto module name: `herdr`.
 
 The owner approved the public repository name and MIT publication on 2026-09-21.
-Portable tests and real Prezto startup checks pass. Native Herdr installation
-and action execution remain **unverified**, and Linux has not yet been tested.
-Publication of the source does not establish either result.
+Portable tests and real Prezto startup checks pass. Installation from GitHub
+through Herdr and direct execution of the installed setup/check script were
+verified on macOS with Herdr 0.9.3 on 2026-10-06. Live-session action invocation
+and Linux have not been tested.
 
 ## Marketplace metadata
 
-Description: **Herdr completions, command notifications, and pane helpers for
-Prezto, with a read-only setup/check action whose native installation is unverified.**
+The manifest describes Prezto completions and pane helpers with read-only setup
+diagnostics and notes that live-session action invocation remains untested,
+matching the installation check below.
 
 The [official marketplace documentation](https://herdr.dev/docs/marketplace/)
 requires a public, non-fork, non-archived GitHub repository with topic
@@ -31,7 +33,8 @@ There are no automatic build, startup, or event hooks.
 
 The manifest and description prepare the package for discovery. Adding the
 `herdr-plugin` topic and verifying a marketplace card remain separate steps
-after native validation. This publication does not claim marketplace listing.
+after the installation validation below and a green delivery PR. This
+publication does not claim marketplace listing.
 
 ## Native validation boundary
 
@@ -40,42 +43,53 @@ present/missing prerequisites. They check that it writes no files or invokes
 Herdr and that printed paths are safely quoted. These checks do not prove that
 Herdr accepts the manifest or executes the action.
 
-An initial private-HOME/XDG test could not establish the required live default
-session baseline; its lab helper refused provisioning before any plugin link.
-The investigation then checked the official Herdr 0.9.1 implementation:
+## Verified installation path
 
-- [`config_dir()`](https://github.com/herdrdev/herdr/blob/v0.9.1/src/config/io.rs#L30)
-  resolves from `XDG_CONFIG_HOME` or HOME. `HERDR_CONFIG_PATH` changes only the
-  TOML file path, not that directory.
-- [Plugin registry and lock paths](https://github.com/herdrdev/herdr/blob/v0.9.1/src/persist/plugin_registry.rs#L11)
-  derive from the same config directory as
-  [session discovery and sockets](https://github.com/herdrdev/herdr/blob/v0.9.1/src/session.rs#L157).
-- `XDG_STATE_HOME` relocates plugin state but not the registry/config.
-  Explicit `--session` takes precedence over `HERDR_SOCKET_PATH`.
-- The [plugin CLI](https://github.com/herdrdev/herdr/blob/v0.9.1/src/cli/plugin.rs#L19)
-  provides no read-only manifest validator; linking updates a registry.
+```sh
+herdr plugin install alexg0/herdr-prezto --ref main -y
+```
 
-No supported storage-only override was found that preserves the required
-session/socket discovery namespace. The actual user plugin registry was not
-used as a fallback. This is a limitation of the tested Herdr version and lab
-contract, not a claim that safe native validation is impossible elsewhere.
+Herdr 0.9.3 installed the public GitHub repository at default-branch commit
+`982026c6c52d154eb4016ddd4b174e059379ea3b`, accepted its manifest, and persisted
+an enabled `herdr-prezto` registration with the `setup-check` action and GitHub
+source metadata. `-y` permits noninteractive installation; interactive users
+can omit it and `--ref main`.
 
-## Remaining native release checks
+Verification used a short private `XDG_CONFIG_HOME`, private `XDG_STATE_HOME`,
+and an explicit unused non-default lab `--session` on every Herdr command.
+No server was provisioned. Herdr's offline installation fallback used only
+private plugin storage, including the registry, lock, and managed checkout. The installed manifest and
+registry action command were checked, and `sh native/setup-check.sh`, executed
+from the installed checkout, exited 0 with successful prerequisite diagnostics
+and manual Prezto configuration instructions. SHA-256 hashes of the live
+registry and lock files and the live session-list output matched before and
+after the check. No live session was contacted for plugin installation.
 
-Use an environment where both plugin storage and lifecycle isolation can be
-proved. A named session alone does not isolate the user-wide registry.
+A short private path matters: the first attempt exceeded the Unix socket path
+length limit before registration; retrying under a short temporary directory
+succeeded without changing the package.
 
-1. Confirm private registry/config/state paths, an initially empty registry,
-   and lifecycle operations constrained to the owned non-default session.
-2. Link this tree, enumerate `herdr-prezto.setup-check`, and invoke it.
-3. Read its command log; verify successful diagnostics and installation
-   instructions, then exercise missing prerequisites.
-4. Unlink only the test registration and safely tear down the owned session;
-   confirm the user's registry and default session are unchanged.
-5. Verify the minimum supported Herdr version and test Linux before describing
-   either as tested native compatibility.
-6. After those checks, add the discovery topic when authorized and verify the
-   marketplace metadata and `herdr plugin install alexg0/herdr-prezto` path.
+The isolation boundary remains relevant on Herdr 0.9.3:
 
-Do not relax isolation guards to complete these checks. The Prezto module can
-be installed directly without native plugin registration.
+- [`config_dir()`](https://github.com/herdrdev/herdr/blob/v0.9.3/src/config/io.rs#L30)
+  resolves from `XDG_CONFIG_HOME` or HOME.
+- [Plugin registry and lock paths](https://github.com/herdrdev/herdr/blob/v0.9.3/src/persist/plugin_registry.rs#L10)
+  and [session/socket discovery](https://github.com/herdrdev/herdr/blob/v0.9.3/src/session.rs#L161)
+  share that config directory. A named session alone does not isolate registration.
+- Explicit `--session` takes precedence over `HERDR_SOCKET_PATH`.
+- The [plugin CLI](https://github.com/herdrdev/herdr/blob/v0.9.3/src/cli/plugin.rs#L196)
+  supports installation without a running server through its offline fallback.
+
+## Remaining checks
+
+The store installation gate is satisfied by the offline check above. It does
+not establish live-session action invocation or plugin command-log behavior.
+Those checks require an environment with private plugin storage and an owned
+running session, without relaxing lifecycle isolation guards. Linux and the
+manifest's minimum Herdr version, 0.9.1, remain untested for native installation.
+
+After the delivery PR is green, add the authorized `herdr-plugin` discovery
+topic and verify marketplace discovery separately. Source installation does
+not itself prove that a marketplace card has appeared. Installing the native
+companion still requires manual Prezto configuration; it never edits shell
+startup files.

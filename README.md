@@ -7,10 +7,11 @@ plus slow-command reporting, notifications, and pane helpers inside
 instructions. Installing that action does not load the module into Zsh.
 
 [`alexg0/herdr-prezto`](https://github.com/alexg0/herdr-prezto) is MIT licensed.
-The Prezto module passes portable and real-Prezto startup tests. The optional
-native Herdr setup/check action is included, but installation and invocation
-through Herdr remain **unverified**; see the [validation boundary](docs/publication.md).
-Install the Prezto module directly using the instructions below.
+The Prezto module passes portable and real-Prezto startup tests. Installation
+from GitHub through Herdr and direct execution of the installed
+setup/check script were verified on macOS with Herdr 0.9.3. Invocation through
+a live Herdr session was not exercised; see the [validation boundary](docs/publication.md).
+Install the Prezto module using the manual configuration instructions below.
 
 ## Requirements
 
@@ -165,21 +166,29 @@ Run the exact action script directly without registering a plugin:
 sh native/setup-check.sh
 ```
 
-The native companion is experimental pending isolated validation. Its intended
-Herdr commands are:
+Install the native companion from GitHub:
 
 ```sh
 herdr plugin install alexg0/herdr-prezto
+```
+
+For noninteractive installation, use `-y`; `--ref main` selects the default
+branch explicitly. The verified command and its isolation setup are recorded
+in the [validation details](docs/publication.md#verified-installation-path).
+
+To invoke the action in your own running Herdr session:
+
+```sh
 herdr plugin action invoke herdr-prezto.setup-check
 herdr plugin log list --plugin herdr-prezto
 ```
 
-These native commands have not been verified against Herdr and are not run by
-the portable checks. Herdr plugin registration is user-wide. The package has no
-build command, startup hook, event hook, keybinding, or automatic shell installer. The action
-does not invoke Herdr or edit configuration. Its output belongs in Herdr's
-plugin command logs. Review the [native validation limitation and release
-checklist](docs/publication.md) before advertising native compatibility.
+Live-session action invocation and plugin command logs were not exercised in
+this validation. Herdr plugin registration is user-wide; a named session alone
+does not isolate the registry. The package has no build command, startup hook,
+event hook, keybinding, or automatic shell installer. The action does not invoke
+Herdr or edit configuration. See the [validation details and remaining
+checks](docs/publication.md).
 
 ## Verify
 
